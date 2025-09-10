@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aromare | In-Stock & On-Order Luxury Perfumes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #05080f;
+            background-image: linear-gradient(180deg, #111827 0%, #05080f 40%);
+            color: #E5E7EB;
+            overflow-x: hidden;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #FACC15;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .gradient-border-wrapper {
+            position: relative;
+            padding: 2px;
+            border-radius: 1.6rem;
+            transition: all 0.4s ease;
+        }
+        .gradient-border-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1.6rem;
+            background: linear-gradient(45deg, #FACC15, #EAB308, #D97706);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        .gradient-border-wrapper:hover::before {
+            opacity: 1;
+        }
+        .gradient-border-wrapper:hover {
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.3);
+        }
+        .inner-card {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .marquee-container { overflow: hidden; white-space: nowrap; }
+        .marquee-content { display: inline-block; animation: marquee 30s linear infinite; padding-left: 100%; }
+        @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-100%); } }
+        
+        .perfume-card { animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .shake { animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1F2937; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #FACC15; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #EAB308; }
+    </style>
+</head>
+<body class="bg-transparent">
+
+    <header class="bg-[#111827]/80 backdrop-blur-sm shadow-xl sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="#home" class="flex items-center gap-4">
+                    <img src="images/logo.jpg" class="w-12 h-12 object-contain" alt="Aromare Logo">
+                    <h1 class="text-3xl font-extrabold text-yellow-400">Aromare</h1>
+                </a>
+                <nav class="hidden md:flex items-center space-x-10" id="desktop-nav">
+                    <a href="#home" class="nav-link font-medium text-gray-300 hover:text-yellow-400 transition-colors">Home</a>
+                    <a href="#products" class="nav-link font-medium text-gray-300 hover:text-yellow-400 transition-colors">In Stock</a>
+                    <a href="#on-order" class="nav-link font-medium text-gray-300 hover:text-yellow-400 transition-colors">On Order</a>
+                    <a href="#about" class="nav-link font-medium text-gray-300 hover:text-yellow-400 transition-colors">About</a>
+                    <a href="#contact" class="nav-link font-medium text-gray-300 hover:text-yellow-400 transition-colors">Contact</a>
+                </nav>
+                <div class="flex items-center space-x-6">
+                    <a href="https://www.instagram.com/aromare.ca/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-yellow-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
+                    </a>
+                    <button id="cart-btn" class="relative text-gray-400 hover:text-yellow-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6l1.6-8.4H7.1"/></svg>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="md:hidden border-t border-gray-800 py-4 hidden">
+                <nav class="flex flex-col space-y-4">
+                    <a href="#home" class="text-gray-300 hover:text-yellow-400 py-2 text-left">Home</a>
+                    <a href="#products" class="text-gray-300 hover:text-yellow-400 py-2 text-left">In Stock</a>
+                    <a href="#on-order" class="text-gray-300 hover:text-yellow-400 py-2 text-left">On Order</a>
+                    <a href="#about" class="text-gray-300 hover:text-yellow-400 py-2 text-left">About</a>
+                    <a href="#contact" class="text-gray-300 hover:text-yellow-400 py-2 text-left">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div id="cart-sidebar" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-75 transition-opacity duration-300" onclick="toggleCart(false)"></div>
+        <div id="cart-content" class="absolute right-0 top-0 h-full w-full md:w-96 bg-[#111111] shadow-2xl border-l border-gray-800 transform translate-x-full transition-transform duration-500">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-yellow-400">Your Cart</h2>
+                    <button onclick="toggleCart(false)" class="text-gray-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+                <div id="cart-items" class="space-y-4 mb-6 flex-1 overflow-y-auto custom-scrollbar pr-2"></div>
+                <div id="cart-summary" class="border-t border-gray-700 pt-4 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-bold text-lg text-yellow-400">Total: <span id="cart-total">$0</span></span>
+                    </div>
+                    <button id="proceed-btn" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 py-4 rounded-lg hover:from-yellow-500 hover:to-yellow-700 transition-all font-bold text-lg">
+                        Proceed to Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 hidden">
+        <div class="bg-[#1A1A1A] p-8 rounded-xl max-w-lg w-full mx-4 border border-yellow-400 relative">
+            <button onclick="togglePaymentModal(false)" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-yellow-400 mb-6">Order Placed! 🥳</h2>
+                <div class="bg-yellow-400 text-gray-900 p-6 rounded-lg mb-6">
+                    <p class="font-bold text-xl">Thank you for choosing Aromare!</p>
+                    <p class="text-sm mt-2">To complete your order, please contact us via:</p>
+                </div>
+                <div class="space-y-4">
+                    <a id="whatsapp-link" href="#" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors transform hover:scale-105" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
+                        WhatsApp Order - +1 (437) 661-6267
+                    </a>
+                    <a href="https://www.instagram.com/aromare.ca/" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-4 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors transform hover:scale-105" target="_blank" rel="noopener noreferrer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
+                        DM on Instagram @aromare.ca
+                    </a>
+                </div>
+                <div class="mt-8 p-6 bg-gray-900/50 rounded-lg">
+                    <p class="text-yellow-400 font-bold text-lg mb-2">Available Payment Methods:</p>
+                    <ul class="list-disc list-inside text-gray-400 text-sm space-y-1 text-left">
+                        <li>E-Transfer</li>
+                        <li>UPI Payment</li>
+                        <li>Cash on Delivery (Toronto only)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="bg-[#111827] border-b border-gray-800 text-sm py-3 marquee-container">
+            <div class="marquee-content font-semibold text-yellow-400">
+                <span class="mx-8">&bull; FREE SHIPPING on all orders over $150</span>
+                <span class="mx-8">&bull; Limited-time offer: 15% OFF on all new arrivals</span>
+                <span class="mx-8">&bull; Get a free sample with every purchase</span>
+                <span class="mx-8">&bull; Follow us on Instagram for exclusive deals!</span>
+                <span class="mx-8">&bull; FREE SHIPPING on all orders over $150</span>
+                <span class="mx-8">&bull; Limited-time offer: 15% OFF on all new arrivals</span>
+                <span class="mx-8">&bull; Get a free sample with every purchase</span>
+                <span class="mx-8">&bull; Follow us on Instagram for exclusive deals!</span>
+            </div>
+        </section>
+
+        <section id="home" class="relative bg-transparent py-24 overflow-hidden">
+            <div class="absolute inset-0 bg-yellow-400/5 blur-3xl opacity-20"></div>
+            <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+                <div class="mb-10 animate-on-scroll">
+                    <div class="inline-block p-2 bg-gray-800 rounded-3xl border-2 border-yellow-400 shadow-2xl shadow-yellow-400/10">
+                        <img src="images/logo.jpg" alt="Aromare Marketing" class="rounded-2xl max-h-96 w-full object-cover"/>
+                    </div>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight animate-on-scroll">
+                    <span class="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-transparent">Curated Luxury & Everyday Perfumes</span>
+                </h1>
+                <p class="text-xl mb-4 text-gray-300 animate-on-scroll">100% Authentic | Trusted Reseller</p>
+                <p class="text-lg mb-8 text-gray-400 animate-on-scroll">DM/WhatsApp for Orders & Delivery | Toronto | Shipping Across Canada</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-on-scroll">
+                    <a href="#products" class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 px-10 py-4 rounded-lg font-bold hover:from-yellow-500 hover:to-yellow-700 transition-all transform hover:scale-105 shadow-lg shadow-yellow-500/20">
+                        Shop Our Collection
+                    </a>
+                    <a href="https://wa.me/14376616267" target="_blank" rel="noopener noreferrer" class="bg-green-600 text-white px-10 py-4 rounded-lg font-bold hover:bg-green-700 transition-colors flex items-center justify-center gap-2 transform hover:scale-105 shadow-lg shadow-green-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
+                        Quick WhatsApp Order
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 bg-[#111827]/50 border-y border-gray-800">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+                    <div class="relative flex-1 max-w-md w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <input type="text" id="search-input" placeholder="Search perfumes..." class="w-full pl-12 pr-4 py-4 bg-gray-900 border border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 text-white placeholder-gray-400 transition-colors">
+                    </div>
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 w-5 h-5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                        <select id="category-select" class="w-full bg-gray-900 border border-gray-700 rounded-full px-6 py-4 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-white transition-colors">
+                            <option value="all">All Perfumes</option>
+                            <option value="luxury">Luxury</option>
+                            <option value="designer">Designer</option>
+                            <option value="affordable">Affordable</option>
+                            <option value="combo">Combo Deals</option>
+                            <option value="bestseller">Best Sellers</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="py-20 bg-transparent">
+            <div class="max-w-7xl mx-auto px-4">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-center mb-16 text-yellow-400 animate-on-scroll">In-Stock Collection</h2>
+                <div id="perfume-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
+                <div id="no-products-found" class="text-center py-16 hidden">
+                    <p class="text-gray-400 text-xl">No perfumes found matching your criteria. ✨</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="on-order" class="py-20 bg-[#111827]/50 border-t border-b border-gray-800">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 text-yellow-400 animate-on-scroll">Luxury Perfumes on Order</h2>
+                    <p class="text-xl text-gray-300 max-w-4xl mx-auto animate-on-scroll" style="animation-delay: 150ms;">
+                        Sourcing the world's finest brands just for you. Contact us to order from Prada, Armani, Versace, Gucci, Dior, YSL, and more at exclusive discounted prices.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                    </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-transparent">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 text-yellow-400 animate-on-scroll">Why Choose Aromare?</h2>
+                    <p class="text-xl text-gray-300 max-w-4xl mx-auto animate-on-scroll" style="animation-delay: 150ms;">
+                        We specialize in sourcing and delivering 100% authentic, premium fragrances at unbeatable prices. Your trusted partner for exquisite scents.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <div class="animate-on-scroll text-center p-8 bg-gray-900/50 rounded-2xl border border-gray-700 shadow-xl transition-transform duration-300 hover:scale-105 hover:shadow-yellow-500/10">
+                        <div class="bg-yellow-400 text-gray-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></div>
+                        <h3 class="text-2xl font-bold mb-2 text-yellow-400">100% Authentic</h3>
+                        <p class="text-gray-400">Every single fragrance is verified for authenticity by our experts. We guarantee quality.</p>
+                    </div>
+                    <div class="animate-on-scroll text-center p-8 bg-gray-900/50 rounded-2xl border border-gray-700 shadow-xl transition-transform duration-300 hover:scale-105 hover:shadow-yellow-500/10" style="animation-delay: 150ms;">
+                        <div class="bg-yellow-400 text-gray-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M12.586 2.586a2 2 0 0 0-2.828 0L2.586 9.757a2 2 0 0 0 0 2.828l7.172 7.172a2 2 0 0 0 2.828 0l7.172-7.172a2 2 0 0 0 0-2.828L12.586 2.586z"/><path d="M16 12h.01"/></svg></div>
+                        <h3 class="text-2xl font-bold mb-2 text-yellow-400">Great Savings</h3>
+                        <p class="text-gray-400">Enjoy significant savings on luxury perfumes compared to traditional retail prices.</p>
+                    </div>
+                    <div class="animate-on-scroll text-center p-8 bg-gray-900/50 rounded-2xl border border-gray-700 shadow-xl transition-transform duration-300 hover:scale-105 hover:shadow-yellow-500/10" style="animation-delay: 300ms;">
+                        <div class="bg-yellow-400 text-gray-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg></div>
+                        <h3 class="text-2xl font-bold mb-2 text-yellow-400">Trusted Service</h3>
+                        <p class="text-gray-400">Experience fast delivery across Canada and professional, reliable customer service.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-transparent">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-6 text-yellow-400 animate-on-scroll">Get In Touch</h2>
+                    <p class="text-xl text-gray-300 animate-on-scroll" style="animation-delay: 150ms;">Ready to explore your perfect scent? Contact us now!</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                    <a href="https://wa.me/14376616267" target="_blank" rel="noopener noreferrer" class="animate-on-scroll bg-gray-900/50 hover:bg-gray-900/80 p-10 rounded-2xl text-center transition-all transform hover:scale-105 shadow-lg border border-gray-700 hover:border-green-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 mx-auto mb-6 text-green-500"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
+                        <h3 class="font-bold text-2xl mb-2 text-white">WhatsApp</h3>
+                        <p class="text-gray-400">+1 (437) 661-6267</p>
+                        <p class="text-sm text-gray-500 mt-2">Book your order faster!</p>
+                    </a>
+                    <a href="https://www.instagram.com/aromare.ca/" target="_blank" rel="noopener noreferrer" class="animate-on-scroll bg-gray-900/50 hover:bg-gray-900/80 p-10 rounded-2xl text-center transition-all transform hover:scale-105 shadow-lg border border-gray-700 hover:border-pink-500" style="animation-delay: 150ms;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-16 h-16 mx-auto mb-6 text-pink-500"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
+                        <h3 class="font-bold text-2xl mb-2 text-white">Instagram</h3>
+                        <p class="text-gray-400">@aromare.ca</p>
+                        <p class="text-sm text-gray-500 mt-2">DM us for quick orders!</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#05080f] py-16 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <img src="images/logo.jpg" class="w-10 h-10 object-contain" alt="Aromare Logo">
+                <h3 class="text-3xl font-extrabold text-yellow-400">Aromare</h3>
+            </div>
+            <p class="text-gray-500 text-sm max-w-md mx-auto">Curated Luxury & Everyday Perfumes - 100% Authentic | Trusted Reseller</p>
+            <div class="flex justify-center space-x-6 mt-6 mb-8">
+                <a href="https://wa.me/14376616267" class="text-gray-400 hover:text-green-500 transition-colors" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg></a>
+                <a href="https://www.instagram.com/aromare.ca/" class="text-gray-400 hover:text-pink-500 transition-colors" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg></a>
+            </div>
+            <p class="text-gray-500 text-sm">&copy; 2025 Aromare. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        let cartItems = [];
+        let wishlist = [];
+        let searchTerm = '';
+        let selectedCategory = 'all';
+
+        const perfumes = [
+            { id: 1, name: "HAWAS Tropical", brand: "Aromare Signature", price: 70, originalPrice: 95, image: "images/hawastropical.jpg", rating: 4.8, category: "luxury", description: "Fresh tropical fragrance with exotic notes perfect for summer vibes." },
+            { id: 2, name: "HAWAS For Him", brand: "Aromare Signature", price: 75, originalPrice: 100, image: "images/hawasforhim.jpg", rating: 4.9, category: "luxury", description: "Sophisticated masculine fragrance with woody and spicy notes." },
+            { id: 3, name: "French Avenue Vulcan", brand: "French Avenue", price: 65, originalPrice: 85, image: "images/vulcan.jpg", rating: 4.7, category: "designer", description: "Bold and captivating fragrance with fresh aquatic notes." },
+            { id: 4, name: "Badee Al Oud", brand: "Aromare Signature", price: 40, originalPrice: 60, image: "images/badeealoud.jpg", rating: 4.6, category: "affordable", description: "Rich oriental fragrance with luxurious oud and spice blend." },
+            { id: 5, name: "Eclaire Single", brand: "Aromare Signature", price: 70, originalPrice: 90, image: "images/eclaire.jpg", rating: 4.5, category: "luxury", description: "Elegant floral fragrance with sophisticated charm." },
+            { id: 6, name: "Eclaire Combo (2 pcs)", brand: "Aromare Signature", price: 130, originalPrice: 180, image: "images/eclaire.jpg", rating: 4.5, category: "combo", description: "Perfect combo deal - Two elegant Eclaire fragrances at special price." },
+            { id: 7, name: "Afnan Best Seller", brand: "Afnan", price: 65, originalPrice: 90, image: "images/afnan.jpg", rating: 4.9, category: "bestseller", description: "Our bestselling Afnan fragrance - customer favorite with incredible longevity." }
+        ];
+
+        const onOrderBrands = ['Prada', 'Armani', 'Versace', 'Gucci', 'Dior', 'YSL'];
+
+        const perfumeGrid = document.getElementById('perfume-grid');
+        const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
+        const noProductsFound = document.getElementById('no-products-found');
+        const cartCount = document.getElementById('cart-count');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartContent = document.getElementById('cart-content');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalSpan = document.getElementById('cart-total');
+        const cartSummary = document.getElementById('cart-summary');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const cartBtn = document.getElementById('cart-btn');
+        const paymentModal = document.getElementById('payment-modal');
+        const proceedBtn = document.getElementById('proceed-btn');
+        const whatsappLink = document.getElementById('whatsapp-link');
+
+        const renderPerfumes = () => {
+            const filteredPerfumes = perfumes.filter(p => 
+                (p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.brand.toLowerCase().includes(searchTerm.toLowerCase())) &&
+                (selectedCategory === 'all' || p.category === selectedCategory)
+            );
+
+            perfumeGrid.innerHTML = '';
+            if (filteredPerfumes.length === 0) {
+                noProductsFound.classList.remove('hidden');
+            } else {
+                noProductsFound.classList.add('hidden');
+                filteredPerfumes.forEach((perfume, index) => {
+                    const cardWrapper = document.createElement('div');
+                    cardWrapper.className = "perfume-card gradient-border-wrapper";
+                    cardWrapper.style.animationDelay = `${index * 50}ms`;
+
+                    const salePercentage = Math.round(((perfume.originalPrice - perfume.price) / perfume.originalPrice) * 100);
+                    const isWishlisted = wishlist.includes(perfume.id);
+
+                    cardWrapper.innerHTML = `
+                        <div class="inner-card bg-gray-900 rounded-3xl overflow-hidden shadow-xl flex flex-col">
+                            <div class="relative">
+                                <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">${salePercentage}% OFF</div>
+                                <button onclick="toggleWishlist(${perfume.id}, this)" class="absolute top-4 right-4 bg-gray-800/50 p-2 rounded-full text-white hover:text-red-500 z-10 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" class="w-6 h-6 ${isWishlisted ? 'text-red-500' : ''}"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                </button>
+                                <img src="${perfume.image}" alt="${perfume.name}" class="w-full h-64 object-cover">
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <p class="text-gray-400 text-sm font-semibold">${perfume.brand.toUpperCase()}</p>
+                                <h3 class="text-2xl font-bold text-white mb-2">${perfume.name}</h3>
+                                <p class="text-gray-400 text-sm mb-4 flex-grow">${perfume.description}</p>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center text-yellow-400">
+                                        ${'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'.repeat(Math.floor(perfume.rating))}
+                                        <span class="ml-2 text-gray-300 font-bold">${perfume.rating}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-2xl font-extrabold text-yellow-400">$${perfume.price}</p>
+                                        <p class="text-sm text-gray-500 line-through">$${perfume.originalPrice}</p>
+                                    </div>
+                                </div>
+                                <button onclick="addToCart(${perfume.id})" class="w-full mt-auto bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 py-3 rounded-lg font-bold hover:from-yellow-500 hover:to-yellow-700 transition-all transform hover:scale-105">Add to Cart</button>
+                            </div>
+                        </div>
+                    `;
+                    perfumeGrid.appendChild(cardWrapper);
+                });
+            }
+        };
+
+        const renderOnOrderBrands = () => {
+            const grid = document.querySelector('#on-order .grid');
+            onOrderBrands.forEach((brand, index) => {
+                const card = document.createElement('div');
+                card.className = "animate-on-scroll";
+                card.style.animationDelay = `${index * 100}ms`;
+                const whatsappMessage = `https://wa.me/14376616267?text=${encodeURIComponent(`Hi Aromare, I'd like to inquire about ordering a perfume from ${brand}.`)}`;
+
+                card.innerHTML = `
+                    <div class="bg-gray-900/50 p-6 h-full rounded-2xl text-center flex flex-col justify-center items-center border border-gray-700 transition-all duration-300 hover:border-yellow-400 hover:scale-105">
+                        <h3 class="text-2xl font-bold text-white mb-2">${brand}</h3>
+                        <p class="text-gray-400 text-xs mb-4">For Professionals & Casuals</p>
+                        <a href="${whatsappMessage}" target="_blank" rel="noopener noreferrer" class="mt-auto w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-gray-900 py-2 px-4 rounded-lg font-bold text-sm hover:from-yellow-500 hover:to-yellow-700 transition-all">
+                            Inquire Now
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        };
+
+        const renderCart = () => {
+            cartItemsContainer.innerHTML = '';
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = `<div class="text-center py-10"><svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mx-auto text-gray-600 mb-4"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 2.5h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6l1.6-8.4H7.1"/></svg><p class="text-gray-400">Your cart is empty.</p><a href="#products" onclick="toggleCart(false)" class="text-yellow-400 font-semibold mt-2 inline-block">Start Shopping</a></div>`;
+                cartSummary.classList.add('hidden');
+            } else {
+                cartSummary.classList.remove('hidden');
+                cartItems.forEach(item => {
+                    const perfume = perfumes.find(p => p.id === item.id);
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'flex items-center gap-4 bg-gray-900 p-3 rounded-lg';
+                    itemElement.innerHTML = `<img src="${perfume.image}" alt="${perfume.name}" class="w-20 h-20 object-cover rounded-md"><div class="flex-1"><p class="font-bold text-white">${perfume.name}</p><p class="text-sm text-gray-400">$${perfume.price}</p><div class="flex items-center gap-2 mt-2"><button onclick="updateQuantity(${item.id}, -1)" class="px-2 bg-gray-700 rounded">-</button><span>${item.quantity}</span><button onclick="updateQuantity(${item.id}, 1)" class="px-2 bg-gray-700 rounded">+</button></div></div><button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></button>`;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+            }
+            updateCartSummary();
+        };
+        
+        const updateCartSummary = () => {
+            const total = cartItems.reduce((sum, item) => sum + (perfumes.find(p => p.id === item.id).price * item.quantity), 0);
+            cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                cartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+            }
+        };
+
+        const addToCart = (perfumeId) => {
+            const existingItem = cartItems.find(item => item.id === perfumeId);
+            if (existingItem) existingItem.quantity++;
+            else cartItems.push({ id: perfumeId, quantity: 1 });
+            cartBtn.classList.add('shake');
+            setTimeout(() => cartBtn.classList.remove('shake'), 820);
+            renderCart();
+        };
+
+        const removeFromCart = (perfumeId) => { cartItems = cartItems.filter(item => item.id !== perfumeId); renderCart(); };
+        const updateQuantity = (perfumeId, change) => {
+            const item = cartItems.find(item => item.id === perfumeId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) removeFromCart(perfumeId);
+                else renderCart();
+            }
+        };
+        const toggleWishlist = (perfumeId, buttonElement) => {
+            const index = wishlist.indexOf(perfumeId);
+            const heartIcon = buttonElement.querySelector('svg');
+            if (index > -1) { wishlist.splice(index, 1); heartIcon.setAttribute('fill', 'none'); heartIcon.classList.remove('text-red-500'); } 
+            else { wishlist.push(perfumeId); heartIcon.setAttribute('fill', 'currentColor'); heartIcon.classList.add('text-red-500'); }
+        };
+        const toggleCart = (show) => {
+            if (show) { cartSidebar.classList.remove('hidden'); setTimeout(() => cartContent.classList.remove('translate-x-full'), 10); } 
+            else { cartContent.classList.add('translate-x-full'); setTimeout(() => cartSidebar.classList.add('hidden'), 500); }
+        };
+        const togglePaymentModal = (show) => { if (show) paymentModal.classList.remove('hidden'); else paymentModal.classList.add('hidden'); };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPerfumes();
+            renderOnOrderBrands();
+            renderCart();
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => { searchTerm = e.target.value; renderPerfumes(); });
+        categorySelect.addEventListener('change', (e) => { selectedCategory = e.target.value; renderPerfumes(); });
+        mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        cartBtn.addEventListener('click', () => toggleCart(true));
+        
+        proceedBtn.addEventListener('click', () => {
+            if (cartItems.length === 0) return;
+            let orderDetails = "Hello Aromare, I'd like to place an order for:\n\n";
+            let total = 0;
+            cartItems.forEach(item => {
+                const perfume = perfumes.find(p => p.id === item.id);
+                orderDetails += `${item.quantity} x ${perfume.name} (@ $${perfume.price} each)\n`;
+                total += perfume.price * item.quantity;
+            });
+            orderDetails += `\nTotal: $${total.toFixed(2)}`;
+            whatsappLink.href = `https://wa.me/14376616267?text=${encodeURIComponent(orderDetails)}`;
+            togglePaymentModal(true);
+            toggleCart(false);
+        });
+    </script>
+</body>
+</html>
